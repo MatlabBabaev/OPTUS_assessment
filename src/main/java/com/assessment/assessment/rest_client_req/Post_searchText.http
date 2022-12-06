@@ -1,0 +1,7 @@
+POST http://localhost:8088/counter-api/search
+Content-Type: application/json
+Authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==
+
+{
+  "searchText":["Duis", "Seds", "ipsum"]
+}

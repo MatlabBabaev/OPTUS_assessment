@@ -1,0 +1,3 @@
+GET http://localhost:8088/counter-api/top/11
+Authorization: Basic b3B0dXM6Y2FuZGlkYXRlcw==
+Accept: text/csv
