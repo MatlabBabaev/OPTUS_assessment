@@ -1,7 +1,9 @@
 package com.assessment.assessment.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +19,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    private Environment env;
+
     @Bean
     public PasswordEncoder encoder(){
         return new BCryptPasswordEncoder();
@@ -25,9 +30,9 @@ public class SecurityConfig {
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user1 = User.builder()
-                .username("optus")
-                .password(encoder().encode("candidates"))
-                .roles("user")
+                .username(env.getProperty("user.login"))
+                .password(encoder().encode(env.getProperty("user.password")))
+                .roles(env.getProperty("user.role"))
                 .build();
         return new InMemoryUserDetailsManager(user1);
     }
@@ -39,8 +44,8 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers( "/counter-api/**")
-                .hasRole("user")
+                .antMatchers( env.getProperty("user.link"))
+                .hasRole(env.getProperty("user.role"))
 //                .permitAll()
                 .anyRequest()
                 .authenticated()
